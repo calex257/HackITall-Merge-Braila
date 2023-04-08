@@ -82,6 +82,35 @@ io.on("connection", (socket) => {
        io.in(room).emit("receive_game_move", data);
        // socket.broadcast.emit("receive_game_move", data);
         console.log(data);
+    });    
+    socket.on("send_computer_move", (data) => {
+        const { game, username, room, level } = data;
+        const jsChessEngine = require('js-chess-engine')
+        const rec_game = new jsChessEngine.Game(game)
+        rec_game.printToConsole()
+        console.log(rec_game.exportFEN());
+        switch (level) {
+            case "beginner":
+                rec_game.aiMove(0);
+                break;
+            case "intermediate":
+                rec_game.aiMove(1);
+                break;
+            case "professional":
+                rec_game.aiMove(2);
+                break;
+            case "grandmaster":
+                rec_game.aiMove(3);
+                break;
+            default:
+                break;
+        }
+        rec_game.printToConsole()
+        data.game = rec_game.exportFEN();
+        console.log(rec_game.exportFEN());
+       io.in(room).emit("receive_computer_move", data);
+       // socket.broadcast.emit("receive_game_move", data);
+        console.log(data);
     });
 
     socket.on("leave_room", (data) => {

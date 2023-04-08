@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlayerChessboard from '../chess/PlayerChessboard';
 import { Chess } from "chess.js";
+import SingleChessboard from '../single/single';
 
-const RoomAndUsers = ({ socket, username, room, count, setCount }) => {
+const RoomAndUsers = ({ socket, username, room, count, setCount, type, level }) => {
   const [roomUsers, setRoomUsers] = useState([]);
 
   const navigate = useNavigate();
@@ -35,8 +36,14 @@ const RoomAndUsers = ({ socket, username, room, count, setCount }) => {
 
   return (
     <div className={styles.roomAndUsersColumn}>
-      <PlayerChessboard socket={socket} username={username} room={room} count={count}>
-      </PlayerChessboard>
+      {
+        type===0?
+        <PlayerChessboard socket={socket} username={username} room={room} count={count}>
+      </PlayerChessboard>:
+      <SingleChessboard socket={socket} username={username} room={room} count={count} level={level}>
+
+      </SingleChessboard>
+        }
      <button className='btn btn-outline' onClick={leaveRoom}>
         Leave
       </button>

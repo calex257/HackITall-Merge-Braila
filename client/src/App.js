@@ -12,6 +12,7 @@ function App() {
     const [username, setUsername] = useState("");
     const [room, setRoom] = useState("");
     const [count, setCount] = useState(-1);
+    const [level, setLevel] = useState('beginner');
 
     return (
         <Router>
@@ -28,6 +29,8 @@ function App() {
                                 count={count}
                                 setCount={setCount}
                                 socket={socket}
+                                level={level}
+                                setLevel={setLevel}
                             />
                         }
                     />
@@ -41,6 +44,7 @@ function App() {
                                 count={count}
                                 setCount={setCount}
                                 socket={socket}
+                                type={0}
                             />
                         }
                     />
@@ -53,10 +57,21 @@ function App() {
                                 count={count}
                                 setCount={setCount}
                                 socket={socket}
+                                type={0}
                             />
                         }
                     ></Route>
-                    <Route path="/single" element={<Chat></Chat>} />
+                    <Route path="/single/:id" element={<Chat
+                                                    username={username}
+                                                    room={room}
+                                                    count={count}
+                                                    setCount={setCount}
+                                                    socket={socket}
+                                                    type={1}
+                                                    level={level}
+                                                    >
+
+                    </Chat>} />
                 </Routes>
             </div>
         </Router>
