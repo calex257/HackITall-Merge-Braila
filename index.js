@@ -18,6 +18,13 @@ function makeRandomMove() {
     window.setTimeout(makeRandomMove, 500);
 }
 
-board = Chessboard("myBoard", "start");
+board = Chessboard("myBoard", {
+    draggable: true,
+    moveSpeed: "slow",
+    snapbackSpeed: 500,
+    snapSpeed: 100,
+    position: "start",
+    pieceTheme: "assets/{piece}.svg",
+});
 
 window.setTimeout(makeRandomMove, 500);
