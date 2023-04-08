@@ -1,0 +1,99 @@
+.chatContainer {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 20px;
+}
+
+/* Room and users component */
+/*
+.roomAndUsersColumn {
+  border-right: 1px solid #dfdfdf;
+} */
+.roomTitle {
+  position: relative;
+  left: 1000px;
+  top: 0px;
+  margin-bottom: 60px;
+  text-transform: uppercase;
+  font-size: 2rem;
+  color: #fff;
+}
+.usersTitle {
+  font-size: 1.2rem;
+  position: relative;
+  left: 1000px;
+  top: -50px;
+  color: #fff;
+}
+.usersList {
+  list-style-type: none;
+  position: relative;
+  left: 1000px;
+  top: -75px;
+  padding-left: 0;
+  margin-bottom: 60px;
+  color: rgb(153, 217, 234);
+  height: 36px;
+  overflow: auto;
+}
+.usersList li {
+  margin-bottom: 12px;
+}
+
+/* Messages */
+.messagesColumn {
+  height: 60vh;
+  overflow: auto;
+  /*padding: 10px 10px 10px 40px;*/
+  position: relative;
+  left: 400px;
+  top: 200px;
+}
+.message {
+  background: rgb(0, 24, 111);
+  border-radius: 6px;
+  margin-bottom: 24px;
+  max-width: 600px;
+  padding: 12px;
+}
+.msgMeta {
+  color: rgb(153, 217, 234);
+  font-size: 0.75rem;
+}
+.msgText {
+  color: #fff;
+}
+
+/* Message input and button */
+.sendMessageContainer {
+  position: relative;
+  left: 375px;
+  top: 200px;
+  padding: 16px 20px 20px 16px;
+}
+.messageInput {
+  padding: 14px;
+  margin-right: 16px;
+  width: 60%;
+  border-radius: 6px;
+  border: 1px solid rgb(153, 217, 234);
+  font-size: 0.9rem;
+}
+
+
+.scrolabil {
+  height:50px;
+  overflow: auto
+}
+
+.example::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.example {
+-ms-overflow-style: none;  /* IE and Edge */
+scrollbar-width: none;  /* Firefox */
+}
