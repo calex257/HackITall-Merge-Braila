@@ -36,9 +36,6 @@ const PlayerChessboard = ({ socket, username, room }) => {
         // return game;
     }
     useEffect(() => {
-        if (!mounted.current) {
-            mounted.current = true;
-        } else {
             socket.on("receive_game_move", (data) => {
                 console.log(data);
                 // setGame((state) => [
@@ -51,12 +48,8 @@ const PlayerChessboard = ({ socket, username, room }) => {
                 // ]);
                 console.log("on receive");
                 console.log(data);
-                if (data.game != {}) {
-                    setGame((state) => data.game);
-                }
+                setGame(new Chess(data.game));
             });
-        }
-
         // Remove event listener on component unmount
         return () => socket.off("receive_game_move");
     }, [socket]);
@@ -159,7 +152,7 @@ const PlayerChessboard = ({ socket, username, room }) => {
         //     return;
         // }
 
-        setTimeout(makeRandomMove, 300);
+      //  setTimeout(makeRandomMove, 300);
         setMoveFrom("");
         setOptionSquares({});
         // socket.emit("send_game_move", {

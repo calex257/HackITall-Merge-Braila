@@ -1,6 +1,8 @@
 import styles from './styles.module.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PlayerChessboard from '../chess/PlayerChessboard';
+import { Chess } from "chess.js";
 
 const RoomAndUsers = ({ socket, username, room }) => {
   const [roomUsers, setRoomUsers] = useState([]);
@@ -25,6 +27,8 @@ const RoomAndUsers = ({ socket, username, room }) => {
 
   return (
     <div className={styles.roomAndUsersColumn}>
+      <PlayerChessboard socket={socket} username={username} room={room}>
+      </PlayerChessboard>
      <button className='btn btn-outline' onClick={leaveRoom}>
         Leave
       </button>
