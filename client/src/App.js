@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import io from "socket.io-client";
 import { useParams } from "react-router-dom";
 
-const socket = io.connect("http://192.168.59.30:4000");
+const socket = io.connect("http://192.168.59.60:4000");
 
 function App() {
     const [username, setUsername] = useState("");

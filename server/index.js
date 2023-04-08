@@ -16,13 +16,7 @@ const server = http.createServer(app); // Add this
 // Create an io server and allow for CORS from http://localhost:3000 with GET and POST methods
 const io = new Server(server, {
     cors: {
-        origin: [
-            "http://192.168.59.30:5000",
-            "http://192.168.59.180:5000",
-            "http://192.168.59.60:5000",
-            "http://192.168.56.1:3380",
-            "*",
-        ],
+        origin: ["http://192.168.59.30:3380", "http://192.168.59.180:3000","http://192.168.59.60:3000", "http://192.168.56.1:3380"],
         methods: ["GET", "POST"],
     },
 });
@@ -39,7 +33,6 @@ io.on("connection", (socket) => {
     socket.on("join_room", (data) => {
         const { username, room } = data; // Data sent from client when join_room event emitted
         socket.join(room); // Join the user to a socket room
-
         let __createdtime__ = Date.now(); // Current timestamp
         // Send message to all users currently in the room, apart from the user that just joined
         socket.to(room).emit("receive_message", {
@@ -47,16 +40,20 @@ io.on("connection", (socket) => {
             username: CHAT_BOT,
             __createdtime__,
         });
+        console.log("Dupa x joined chat");
         // Send welcome msg to user that just joined chat only
         socket.emit("receive_message", {
             message: `Welcome ${username}`,
             username: CHAT_BOT,
             __createdtime__,
         });
+        console.log("Dupa x welcome");
         // Save the new user to the room
         chatRoom = room;
         allUsers.push({ id: socket.id, username, room });
         chatRoomUsers = allUsers.filter((user) => user.room === room);
+        console.log(allUsers);
+        console.log(chatRoomUsers);
         socket.to(room).emit("chatroom_users", chatRoomUsers);
         socket.emit("chatroom_users", chatRoomUsers);
 
@@ -72,7 +69,9 @@ io.on("connection", (socket) => {
     socket.on("send_message", (data) => {
         const { message, username, room, __createdtime__ } = data;
         console.log(message);
-        io.in(room).emit("receive_message", data); // Send to all users in room, including sender
+        io.in(room).emit("receive_message", data);
+      //  socket.broadcast.emit("receive_message", data);
+        console.log(io.in(room)); // Send to all users in room, including sender
         // harperSaveMessage(message, username, room, __createdtime__) // Save message in db
         //     .then((response) => console.log(response))
         //     .catch((err) => console.log(err));
@@ -80,8 +79,8 @@ io.on("connection", (socket) => {
 
     socket.on("send_game_move", (data) => {
         const { game, username, room } = data;
-        io.in(room).emit("receive_game_move", data);
-        // socket.broadcast.emit("receive_game_move", data);
+       io.in(room).emit("receive_game_move", data);
+       // socket.broadcast.emit("receive_game_move", data);
         console.log(data);
     });
 

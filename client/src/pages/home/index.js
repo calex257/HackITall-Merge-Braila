@@ -1,17 +1,30 @@
 import styles from "./styles.module.css";
 import { useNavigate } from "react-router-dom"; // Add this
+import { useState } from "react";
 
 const Home = ({ username, setUsername, room, setRoom, socket }) => {
     const navigate = useNavigate(); // Add this
+    const [roomID, setRoomID] = useState("");
 
-    const joinRoom = () => {
-        if (room !== "" && username !== "") {
-            room = Math.floor(Math.random() * 10000);
-            socket.emit("join_room", { username, room });
+    const handleChange = (event) => {
+        setRoomID(event.target.value);
+    };
+    const createRoom = () => {
+       const rm =(Math.random() + 1).toString(36).substring(7);
+        console.log(rm);
+        if (username !== "") {
+            setRoom(rm);
+            socket.emit("join_room", { username, room: rm });
         }
 
         // Redirect to /chat
-        navigate(`/game/${room}`, { replace: true });
+        navigate(`/game/${rm}`, { replace: true });
+    };
+    const joinRoom = (value) => {
+        socket.emit("join_room", { username, room: roomID });
+        setRoom(roomID);
+        console.log(roomID);
+        navigate(`/game/${roomID}`, { replace: true });
     };
 
     return (
@@ -23,11 +36,19 @@ const Home = ({ username, setUsername, room, setRoom, socket }) => {
                     placeholder="Username..."
                     onChange={(e) => setUsername(e.target.value)}
                 />
-
-                <select
-                    className={styles.input}
-                    onChange={(e) => setRoom(e.target.value)}
+                <input
+                    type="text"
+                    onChange={handleChange}
+                    value={roomID}
+                ></input>
+                <button
+                    className="btn btn-secondary"
+                    style={{ width: "100%" }}
+                    onClick={(e) => joinRoom(e.target.value)}
                 >
+                    Join game
+                </button>
+                <select className={styles.input} onChange={(e) => {}}>
                     <option>-- Select your level --</option>
                     <option value="beginner">Beginner</option>
                     <option value="intermediate">Intermediate</option>
@@ -38,9 +59,9 @@ const Home = ({ username, setUsername, room, setRoom, socket }) => {
                 <button
                     className="btn btn-secondary"
                     style={{ width: "100%" }}
-                    onClick={joinRoom}
+                    onClick={createRoom}
                 >
-                    Join Room
+                    Make Room
                 </button>
             </div>
         </div>
