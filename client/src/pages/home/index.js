@@ -2,7 +2,7 @@ import styles from "./styles.module.css";
 import { useNavigate } from "react-router-dom"; // Add this
 import { useState } from "react";
 
-const Home = ({ username, setUsername, room, setRoom, count, setCount, socket }) => {
+const Home = ({ username, setUsername, room, setRoom, count, setCount, socket, level, setLevel }) => {
     const navigate = useNavigate(); // Add this
     const [roomID, setRoomID] = useState("");
 
@@ -22,6 +22,19 @@ const Home = ({ username, setUsername, room, setRoom, count, setCount, socket })
         // Redirect to /chat
         navigate(`/game/${rm}`, { replace: true });
     };
+    const createSingle = () => {
+       const rm =(Math.random() + 1).toString(36).substring(7);
+        console.log(rm);
+        if (username !== "") {
+            setRoom(rm);
+            setCount(0);
+            console.log(count);
+            socket.emit("join_room", { username, room: rm });
+        }
+
+        // Redirect to /chat
+        navigate(`/single/${rm}`, { replace: true });
+    };
     const joinRoom = (value) => {
         socket.emit("join_room", { username, room: roomID });
         setRoom(roomID);
@@ -29,6 +42,14 @@ const Home = ({ username, setUsername, room, setRoom, count, setCount, socket })
         console.log(count);
         console.log(roomID);
         navigate(`/game/${roomID}`, { replace: true });
+    };
+    const spectateRoom = (value) => {
+        socket.emit("join_room", { username, room: roomID });
+        setRoom(roomID);
+        setCount((state)=>state + 1);
+        console.log(count);
+        console.log(roomID);
+        navigate(`/single/${roomID}`, { replace: true });
     };
 
     return (
@@ -52,7 +73,7 @@ const Home = ({ username, setUsername, room, setRoom, count, setCount, socket })
                 >
                     Join game
                 </button>
-                <select className={styles.input} onChange={(e) => {}}>
+                <select className={styles.input} onChange={(e) => {setLevel(e.target.value)}}>
                     <option>-- Select your level --</option>
                     <option value="beginner">Beginner</option>
                     <option value="intermediate">Intermediate</option>
@@ -66,6 +87,20 @@ const Home = ({ username, setUsername, room, setRoom, count, setCount, socket })
                     onClick={createRoom}
                 >
                     Make Room
+                </button>
+                <button
+                    className="btn btn-secondary"
+                    style={{ width: "100%" }}
+                    onClick={createSingle}
+                >
+                    Single player game
+                </button>
+                <button
+                    className="btn btn-secondary"
+                    style={{ width: "100%" }}
+                    onClick={spectateRoom}
+                >
+                    Spectate computer game
                 </button>
             </div>
         </div>
