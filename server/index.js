@@ -7,6 +7,7 @@ const { Server } = require("socket.io");
 // const harperSaveMessage = require("./services/harper-save-message");
 // const harperGetMessages = require("./services/harper-get-messages");
 const leaveRoom = require("./utils/leave-room"); // Add this
+const { CLIENT_RENEG_WINDOW } = require("tls");
 
 app.use(cors()); // Add cors middleware
 
@@ -15,7 +16,7 @@ const server = http.createServer(app); // Add this
 // Create an io server and allow for CORS from http://localhost:3000 with GET and POST methods
 const io = new Server(server, {
     cors: {
-        origin: ["http://192.168.59.30:3000", "http://192.168.59.180:3000"],
+        origin: ["http://192.168.59.30:3000", "http://192.168.59.180:3000","http://192.168.59.60:3000"],
         methods: ["GET", "POST"],
     },
 });
@@ -64,6 +65,7 @@ io.on("connection", (socket) => {
 
     socket.on("send_message", (data) => {
         const { message, username, room, __createdtime__ } = data;
+        console.log(message);
         io.in(room).emit("receive_message", data); // Send to all users in room, including sender
         // harperSaveMessage(message, username, room, __createdtime__) // Save message in db
         //     .then((response) => console.log(response))
