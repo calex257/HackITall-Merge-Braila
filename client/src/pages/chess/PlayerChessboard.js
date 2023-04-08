@@ -5,7 +5,7 @@ import { Chessboard } from "react-chessboard";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import io from "socket.io-client";
 
-const PlayerChessboard = ({ socket, username, room }) => {
+const PlayerChessboard = ({ socket, username, room, count }) => {
     // let game = new Chess();
     const [game, setGame] = useState(new Chess());
     const [is_state_updated, set_is_state_updated] = useState(false);
@@ -14,6 +14,7 @@ const PlayerChessboard = ({ socket, username, room }) => {
     const [moveSquares, setMoveSquares] = useState({});
     const [optionSquares, setOptionSquares] = useState({});
     const mounted = useRef(false);
+    console.log(`numar ${count}`);
     // useEffect(() => {
     //     // do componentDidUpdate logic
     //     console.log(game);
@@ -96,6 +97,15 @@ const PlayerChessboard = ({ socket, username, room }) => {
     }
 
     function onSquareClick(square) {
+        if(count > 1) {
+            return;
+        }
+        if(count == 1 && game.turn() === 'w') {
+            return;
+        }
+        if(count == 0 && game.turn() === 'b') {
+            return;
+        }
         setRightClickedSquares({});
 
         function resetFirstMove(square) {
@@ -184,6 +194,7 @@ const PlayerChessboard = ({ socket, username, room }) => {
                 arePiecesDraggable={false}
                 position={game.fen()}
                 onSquareClick={onSquareClick}
+                boardOrientation={count===1?"black":"white"}
                 onSquareRightClick={onSquareRightClick}
                 customBoardStyle={{
                     borderRadius: "4px",

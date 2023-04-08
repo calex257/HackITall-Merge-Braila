@@ -6,11 +6,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import io from "socket.io-client";
 import { useParams } from "react-router-dom";
 
-const socket = io.connect("http://192.168.59.60:4000");
+const socket = io.connect("http://192.168.59.180:4000");
 
 function App() {
     const [username, setUsername] = useState("");
     const [room, setRoom] = useState("");
+    const [count, setCount] = useState(-1);
 
     return (
         <Router>
@@ -24,6 +25,8 @@ function App() {
                                 setUsername={setUsername}
                                 room={room}
                                 setRoom={setRoom}
+                                count={count}
+                                setCount={setCount}
                                 socket={socket}
                             />
                         }
@@ -35,6 +38,8 @@ function App() {
                             <Chat
                                 username={username}
                                 room={room}
+                                count={count}
+                                setCount={setCount}
                                 socket={socket}
                             />
                         }
@@ -45,6 +50,8 @@ function App() {
                             <Chat
                                 username={username}
                                 room={room}
+                                count={count}
+                                setCount={setCount}
                                 socket={socket}
                             />
                         }

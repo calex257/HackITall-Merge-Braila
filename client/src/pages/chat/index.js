@@ -4,7 +4,7 @@ import SendMessage from "./send-message";
 import MessagesReceived from "./messages";
 import { useParams } from "react-router-dom";
 
-const Chat = ({ username, room, socket }) => {
+const Chat = ({ username, room, count, setCount, socket }) => {
     const { id } = useParams();
     console.log(id);
     return (
@@ -13,6 +13,8 @@ const Chat = ({ username, room, socket }) => {
                 socket={socket}
                 username={username}
                 room={room}
+                count={count}
+                setCount={setCount}
             />
 
             <div>

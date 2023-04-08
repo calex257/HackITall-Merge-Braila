@@ -2,7 +2,7 @@ import styles from "./styles.module.css";
 import { useNavigate } from "react-router-dom"; // Add this
 import { useState } from "react";
 
-const Home = ({ username, setUsername, room, setRoom, socket }) => {
+const Home = ({ username, setUsername, room, setRoom, count, setCount, socket }) => {
     const navigate = useNavigate(); // Add this
     const [roomID, setRoomID] = useState("");
 
@@ -14,6 +14,8 @@ const Home = ({ username, setUsername, room, setRoom, socket }) => {
         console.log(rm);
         if (username !== "") {
             setRoom(rm);
+            setCount(0);
+            console.log(count);
             socket.emit("join_room", { username, room: rm });
         }
 
@@ -23,6 +25,8 @@ const Home = ({ username, setUsername, room, setRoom, socket }) => {
     const joinRoom = (value) => {
         socket.emit("join_room", { username, room: roomID });
         setRoom(roomID);
+        setCount((state)=>state + 1);
+        console.log(count);
         console.log(roomID);
         navigate(`/game/${roomID}`, { replace: true });
     };

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import PlayerChessboard from '../chess/PlayerChessboard';
 import { Chess } from "chess.js";
 
-const RoomAndUsers = ({ socket, username, room }) => {
+const RoomAndUsers = ({ socket, username, room, count, setCount }) => {
   const [roomUsers, setRoomUsers] = useState([]);
 
   const navigate = useNavigate();
@@ -13,6 +13,14 @@ const RoomAndUsers = ({ socket, username, room }) => {
     socket.on('chatroom_users', (data) => {
       console.log(data);
       setRoomUsers(data);
+      let nr = 0;
+      for(let i = 0;i<data.length;i ++) {
+        if(data[i].username === username) {
+          nr = i;
+          break;
+        }
+      }
+      setCount(nr);
     });
 
     return () => socket.off('chatroom_users');
@@ -27,7 +35,7 @@ const RoomAndUsers = ({ socket, username, room }) => {
 
   return (
     <div className={styles.roomAndUsersColumn}>
-      <PlayerChessboard socket={socket} username={username} room={room}>
+      <PlayerChessboard socket={socket} username={username} room={room} count={count}>
       </PlayerChessboard>
      <button className='btn btn-outline' onClick={leaveRoom}>
         Leave
