@@ -36,21 +36,20 @@ const PlayerChessboard = ({ socket, username, room }) => {
         // return game;
     }
     useEffect(() => {
-        socket.on("receive_game_move", (data) => {
-            console.log(data);
-            // setGame((state) => [
-            //     ...state,
-            //     {
-            //         message: data.message,
-            //         username: data.username,
-            //         __createdtime__: data.__createdtime__,
-            //     },
-            // ]);
-            console.log("on receive");
-            console.log(data.game);
-            setGame(new Chess(data.game));
-        });
-
+            socket.on("receive_game_move", (data) => {
+                console.log(data);
+                // setGame((state) => [
+                //     ...state,
+                //     {
+                //         message: data.message,
+                //         username: data.username,
+                //         __createdtime__: data.__createdtime__,
+                //     },
+                // ]);
+                console.log("on receive");
+                console.log(data);
+                setGame(new Chess(data.game));
+            });
         // Remove event listener on component unmount
         return () => socket.off("receive_game_move");
     }, [socket]);
@@ -153,7 +152,7 @@ const PlayerChessboard = ({ socket, username, room }) => {
         //     return;
         // }
 
-        // setTimeout(makeRandomMove, 300);
+      //  setTimeout(makeRandomMove, 300);
         setMoveFrom("");
         setOptionSquares({});
         // socket.emit("send_game_move", {
