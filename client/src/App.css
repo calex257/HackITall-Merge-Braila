@@ -32,8 +32,8 @@ body {
   border: none;
 }
 .btn-outline {
-  position: relative;
-  left: 800px;
+  /* position: relative;
+  left: 800px; */
   color: rgb(153, 217, 234);
   border: 1px solid rgb(153, 217, 234);
   background: rgb(63, 73, 204);
