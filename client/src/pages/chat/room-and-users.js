@@ -44,12 +44,9 @@ const RoomAndUsers = ({ socket, username, room, count, setCount, type, level }) 
 
       </SingleChessboard>
         }
-     <button className='btn btn-outline' onClick={leaveRoom}>
-        Leave
-      </button>
-      <h2 className={styles.roomTitle}>{room}</h2>
-
-      <div >
+        <div className={styles.hcontainer}>
+      <h2 className={styles.roomTitle}>{`ROOM CODE: ${room}`}</h2>
+      <div className={styles.userContainer}>
         {roomUsers.length > 0 && <h5 className={styles.usersTitle}>Users:</h5>}
         <ul className={styles.usersList} example>
           {roomUsers.map((user) => (
@@ -64,6 +61,13 @@ const RoomAndUsers = ({ socket, username, room, count, setCount, type, level }) 
           ))}
         </ul>
       </div>
+
+     {/* <button className='btn btn-outline' onClick={leaveRoom}>
+        Leave
+      </button> */}
+        </div>
+
+      
 
       {/* <button className='btn btn-outline' onClick={leaveRoom}>
         Leave

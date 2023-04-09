@@ -76,10 +76,10 @@ const Messages = ({ socket ,username, room}) => {
             </span>
           </div>
           <p className={styles.msgText}>{msg.message}</p>
-          <br />
         </div>
       ))}
     </div>
+
   );
 };
 

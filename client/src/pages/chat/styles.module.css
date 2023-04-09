@@ -2,7 +2,7 @@
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 2.5fr 1fr;
   gap: 20px;
 }
 
@@ -12,27 +12,29 @@
   border-right: 1px solid #dfdfdf;
 } */
 .roomTitle {
-  position: relative;
+  /* position: relative;
   left: 1000px;
-  top: -300px;
+  top: -300px; */
   margin-bottom: 60px;
   text-transform: uppercase;
   font-size: 2rem;
   color: #fff;
+  display: inline;
 }
 .usersTitle {
   font-size: 1.2rem;
-  position: relative;
+  /* position: relative;
   left: 1000px;
-  top: -350px;
+  top: -350px; */
   color: #fff;
 }
 .usersList {
   list-style-type: none;
-  position: relative;
+  /* position: relative;
   left: 1000px;
-  top: -360px;
+  top: -360px; */
   padding-left: 0;
+  
   margin-bottom: 100px;
   color: rgb(153, 217, 234);
   height: 80px;
@@ -40,6 +42,8 @@
 }
 .usersList li {
   margin-bottom: 7px;
+  display: inline-block;
+  padding-right: 10px;
 }
 
 /* Messages */
@@ -47,15 +51,23 @@
   height: 60vh;
   overflow: auto;
   /*padding: 10px 10px 10px 40px;*/
-  position: relative;
+  /* position: relative;
   left: 400px;
-  top: 200px;
+  top: 200px; */
+}
+.hcontainer{
+  display: inline-flex;
+  flex-direction: row;
+  gap: 40px;
+}
+.userContainer{
 }
 .message {
   background: rgb(0, 24, 111);
   border-radius: 6px;
   margin-bottom: 24px;
   max-width: 600px;
+  width: 100%;
   padding: 12px;
 }
 .msgMeta {
@@ -68,15 +80,15 @@
 
 /* Message input and button */
 .sendMessageContainer {
-  position: relative;
+  /* position: relative;
   left: 375px;
-  top: 200px;
-  padding: 16px 20px 20px 16px;
+  top: 200px; */
+  /* padding: 16px 20px 20px 16px; */
 }
 .messageInput {
   padding: 14px;
-  margin-right: 16px;
-  width: 60%;
+  margin-bottom: 16px;
+  width: 100%;
   border-radius: 6px;
   border: 1px solid rgb(153, 217, 234);
   font-size: 0.9rem;
