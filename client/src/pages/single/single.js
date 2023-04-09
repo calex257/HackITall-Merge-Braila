@@ -5,7 +5,7 @@ import { Chessboard } from "react-chessboard";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import io from "socket.io-client";
 
-const SingleChessboard = ({ socket, username, room, count, level }) => {
+const SingleChessboard = ({ socket, username, room, count, level, setBoardFEN, setMoves  }) => {
     // let game = new Chess();
     const [game, setGame] = useState(new Chess());
     const [is_state_updated, set_is_state_updated] = useState(false);
@@ -30,12 +30,19 @@ const SingleChessboard = ({ socket, username, room, count, level }) => {
         setGame((g) => {
             const update = { ...g };
             modify(update);
-            return update;
+            socket.emit("send_game_move", {
+                game: update.fen(),
+                move: "sex",
+                username,
+                room,
         });
         // const update = { ...game };
         // modify(game);
         // return game;
-    }
+        setBoardFEN(update.fen());
+            setMoves([]);
+            return update;
+    });}
     useEffect(() => {
             socket.on("receive_computer_move", (data) => {
                 console.log(data);
@@ -49,7 +56,16 @@ const SingleChessboard = ({ socket, username, room, count, level }) => {
                 // ]);
                 console.log("on receive");
                 console.log(data);
-                setGame(new Chess(data.game));
+                const newGame = new Chess(data.game);
+                setGame(newGame);
+                setMoves((state) => {
+                    return [...state, {from: Object.keys(data.move)[0].toLowerCase(),
+                        to:Object.values(data.move)[0].toLowerCase()}]
+                    })
+                    setBoardFEN(data.game);
+                    if (newGame.game_over()) {
+                        alert ("Game over! Black won!");
+                    }
             });
         // Remove event listener on component unmount
         return () => socket.off("receive_computer_move");
@@ -100,10 +116,10 @@ const SingleChessboard = ({ socket, username, room, count, level }) => {
         if(count > 0) {
             return;
         }
-        if(count == 1 && game.turn() === 'w') {
+        if(count === 1 && game.turn() === 'w') {
             return;
         }
-        if(count == 0 && game.turn() === 'b') {
+        if(count === 0 && game.turn() === 'b') {
             return;
         }
         setRightClickedSquares({});
@@ -141,10 +157,19 @@ const SingleChessboard = ({ socket, username, room, count, level }) => {
             to: square,
             promotion: "q", // always promote to a queen for example simplicity
         });
+        console.log(gameCopy.game_over())
+        if(gameCopy.game_over()) {
+            alert("Game over! White won!");
+        }
         console.log(gameCopy);
+        setMoves((state)=>{
+            return [...state, move];
+        });
         gameCopy.fen();
         console.log(gameCopy.ascii());
         console.log(JSON.stringify(gameCopy));
+        
+        setBoardFEN(gameCopy.fen());
         socket.emit("send_computer_move", {
             game: gameCopy.fen(),
             move,
@@ -219,7 +244,7 @@ const SingleChessboard = ({ socket, username, room, count, level }) => {
             >
                 reset
             </button>
-            <button
+            {/* <button
                 style={{}}
                 onClick={() => {
                     safeGameMutate((game) => {
@@ -230,7 +255,7 @@ const SingleChessboard = ({ socket, username, room, count, level }) => {
                 }}
             >
                 undo
-            </button>
+            </button> */}
         </div>
     );
 };

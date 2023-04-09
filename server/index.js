@@ -70,7 +70,7 @@ io.on("connection", (socket) => {
         const { message, username, room, __createdtime__ } = data;
         console.log(message);
         io.in(room).emit("receive_message", data);
-      //  socket.broadcast.emit("receive_message", data);
+    //    socket.broadcast.emit("receive_message", data);
         console.log(io.in(room)); // Send to all users in room, including sender
         // harperSaveMessage(message, username, room, __createdtime__) // Save message in db
         //     .then((response) => console.log(response))
@@ -79,8 +79,8 @@ io.on("connection", (socket) => {
 
     socket.on("send_game_move", (data) => {
         const { game, username, room } = data;
-       io.in(room).emit("receive_game_move", data);
-       // socket.broadcast.emit("receive_game_move", data);
+    //    io.in(room).emit("receive_game_move", data);
+       socket.broadcast.emit("receive_game_move", data);
         console.log(data);
     });    
     socket.on("send_computer_move", (data) => {
@@ -89,24 +89,28 @@ io.on("connection", (socket) => {
         const rec_game = new jsChessEngine.Game(game)
         rec_game.printToConsole()
         console.log(rec_game.exportFEN());
+        let move;
         switch (level) {
             case "beginner":
-                rec_game.aiMove(0);
+                move = rec_game.aiMove(0);
                 break;
             case "intermediate":
-                rec_game.aiMove(1);
+                move = rec_game.aiMove(1);
                 break;
             case "professional":
-                rec_game.aiMove(2);
+                move = rec_game.aiMove(2);
                 break;
             case "grandmaster":
-                rec_game.aiMove(3);
+                move = rec_game.aiMove(3);
                 break;
             default:
                 break;
         }
         rec_game.printToConsole()
         data.game = rec_game.exportFEN();
+        data.move = move;
+        console.log(move);
+        //localStorage.setItem(JSON.stringify(username), JSON.stringify(data.game));
         console.log(rec_game.exportFEN());
        io.in(room).emit("receive_computer_move", data);
        // socket.broadcast.emit("receive_game_move", data);

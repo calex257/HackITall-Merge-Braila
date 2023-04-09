@@ -8,10 +8,26 @@ import {useState} from 'react';
 const Chat = ({ username, room, count, setCount, socket, type, level }) => {
     const { id } = useParams();
     const [roomUsers, setRoomUsers] = useState([]);
+    const [boardFEN, setBoardFEN] = useState("");
+    const [moves, setMoves] = useState([]); 
     console.log(id);
     return (
         <div className={styles.chatContainer}>
-            <div></div>
+            <div className={styles.leftcol}>
+                <div className={styles.movelist}>
+                    {moves.map(
+                        (move) => {
+                            if(move){
+
+                                return <div className={styles.move}>
+                                {`${move.from} ${move.to}`}
+                            </div>
+                            }
+                            return <></>;
+                        }
+                    )}
+                </div>
+            </div>
             <RoomAndUsersColumn
                 socket={socket}
                 username={username}
@@ -20,8 +36,10 @@ const Chat = ({ username, room, count, setCount, socket, type, level }) => {
                 setCount={setCount}
                 type={type}
                 level={level}
-                roomUsers={roomUsers}
-                setRoomUsers={setRoomUsers}
+                boardFEN={boardFEN}
+                setBoardFEN={setBoardFEN}
+                setMoves={setMoves}
+                moves={moves}
             />
 
             <div>

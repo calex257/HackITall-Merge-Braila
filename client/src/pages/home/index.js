@@ -7,7 +7,7 @@ const Home = ({ username, setUsername, room, setRoom, count, setCount, socket, l
     const [roomID, setRoomID] = useState("");
 
     const handleChange = (event) => {
-        setRoomID(event.target.value);
+        setRoomID(event.target.value.toLowerCase());
     };
     const createRoom = () => {
        const rm =(Math.random() + 1).toString(36).substring(7);
@@ -36,8 +36,8 @@ const Home = ({ username, setUsername, room, setRoom, count, setCount, socket, l
         navigate(`/single/${rm}`, { replace: true });
     };
     const joinRoom = (value) => {
-        socket.emit("join_room", { username, room: roomID });
-        setRoom(roomID);
+        socket.emit("join_room", { username, room: roomID.toLowerCase() });
+        setRoom(roomID.toLowerCase());
         setCount((state)=>state + 1);
         console.log(count);
         console.log(roomID);
@@ -69,7 +69,7 @@ const Home = ({ username, setUsername, room, setRoom, count, setCount, socket, l
                 <button
                     className="btn btn-secondary"
                     style={{ width: "100%" }}
-                    onClick={(e) => joinRoom(e.target.value)}
+                    onClick={(e) => joinRoom(e.target.value.toLowerCase())}
                 >
                     Join game
                 </button>
