@@ -5,7 +5,7 @@ import { Chessboard } from "react-chessboard";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import io from "socket.io-client";
 
-const PlayerChessboard = ({ socket, username, room, count }) => {
+const PlayerChessboard = ({ socket, username, room, count, setBoardFEN, setMoves, moves }) => {
     // let game = new Chess();
     const [game, setGame] = useState(new Chess());
     const [is_state_updated, set_is_state_updated] = useState(false);
@@ -30,6 +30,37 @@ const PlayerChessboard = ({ socket, username, room, count }) => {
         setGame((g) => {
             const update = { ...g };
             modify(update);
+            socket.emit("send_game_move", {
+                game: update.fen(),
+                move: "sex",
+                username,
+                room,
+            });
+            setBoardFEN(update.fen());
+            setMoves([]);
+            return update;
+        });
+        // const update = { ...game };
+        // modify(game);
+        // return game;
+    }
+    function safeGameUndo(modify) {
+        setGame((g) => {
+            const update = { ...g };
+            modify(update);
+            socket.emit("send_game_move", {
+                game: update.fen(),
+                move: "sex",
+                username,
+                room,
+            });
+            setBoardFEN(update.fen());
+            setMoves((state)=>{
+                if(state.length>0){
+                    return state.pop();
+                }
+                return state;
+            })
             return update;
         });
         // const update = { ...game };
@@ -50,6 +81,23 @@ const PlayerChessboard = ({ socket, username, room, count }) => {
                 console.log("on receive");
                 console.log(data);
                 setGame(new Chess(data.game));
+                if(data.move === "sex") {
+                    setMoves([]);
+                } else if (data.move === "undo") {
+                    setMoves((state)=>{
+                        if(state.length>0){
+                            return state.pop();
+                        }
+                        return state;
+                    })
+                } else {
+
+                    setMoves((state) => {
+                        return [...state, data.move];
+                    });
+                }
+                    
+                setBoardFEN(data.game);
             });
         // Remove event listener on component unmount
         return () => socket.off("receive_game_move");
@@ -60,9 +108,6 @@ const PlayerChessboard = ({ socket, username, room, count }) => {
             square,
             verbose: true,
         });
-        if (moves.length === 0) {
-            return false;
-        }
 
         const newSquares = {};
         moves.map((move) => {
@@ -141,16 +186,23 @@ const PlayerChessboard = ({ socket, username, room, count }) => {
             to: square,
             promotion: "q", // always promote to a queen for example simplicity
         });
+        setMoves((state)=>{
+            return [...state, move];
+        });
         console.log(gameCopy);
         gameCopy.fen();
         console.log(gameCopy.ascii());
         console.log(JSON.stringify(gameCopy));
+        setBoardFEN(gameCopy.fen());
         socket.emit("send_game_move", {
             game: gameCopy.fen(),
             move,
             username,
             room,
         });
+        if(gameCopy.game_over()) {
+            alert(`Game over! ${move.color === 'b'? "Black":"White"} won!`);
+        }
         // setGame((state) => {
         //     console.log("DUPA EMIT");
         //     console.log(gameCopy);
@@ -221,7 +273,7 @@ const PlayerChessboard = ({ socket, username, room, count }) => {
             <button
                 style={{}}
                 onClick={() => {
-                    safeGameMutate((game) => {
+                    safeGameUndo((game) => {
                         game.undo();
                     });
                     setMoveSquares({});

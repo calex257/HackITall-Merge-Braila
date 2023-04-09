@@ -5,7 +5,7 @@ import PlayerChessboard from '../chess/PlayerChessboard';
 import { Chess } from "chess.js";
 import SingleChessboard from '../single/single';
 
-const RoomAndUsers = ({ socket, username, room, count, setCount, type, level }) => {
+const RoomAndUsers = ({ socket, username, room, count, setCount, type, level, boardFEN, setBoardFEN, setMoves, moves }) => {
   const [roomUsers, setRoomUsers] = useState([]);
 
   const navigate = useNavigate();
@@ -38,12 +38,18 @@ const RoomAndUsers = ({ socket, username, room, count, setCount, type, level }) 
     <div className={styles.roomAndUsersColumn}>
       {
         type===0?
-        <PlayerChessboard socket={socket} username={username} room={room} count={count}>
+        <PlayerChessboard socket={socket} username={username} room={room} count={count} setBoardFEN={setBoardFEN}
+        setMoves={setMoves} moves={moves}>
       </PlayerChessboard>:
-      <SingleChessboard socket={socket} username={username} room={room} count={count} level={level}>
+      <SingleChessboard socket={socket} username={username} room={room} count={count} level={level}
+      setBoardFEN={setBoardFEN} setMoves={setMoves}>
 
       </SingleChessboard>
         }
+        <div>
+        <div className={styles.fenstring}>
+                    {boardFEN}
+                </div>
         <div className={styles.hcontainer}>
       <h2 className={styles.roomTitle}>{`ROOM CODE: ${room}`}</h2>
       <div className={styles.userContainer}>
@@ -51,10 +57,10 @@ const RoomAndUsers = ({ socket, username, room, count, setCount, type, level }) 
         <ul className={styles.usersList} example>
           {roomUsers.map((user) => (
             <li
-              style={{
-                fontWeight: `${user.username === username ? 'bold' : 'normal'}`,
-              }}
-              key={user.id}
+            style={{
+              fontWeight: `${user.username === username ? 'bold' : 'normal'}`,
+            }}
+            key={user.id}
             >
               {user.username}
             </li>
@@ -72,6 +78,7 @@ const RoomAndUsers = ({ socket, username, room, count, setCount, type, level }) 
       {/* <button className='btn btn-outline' onClick={leaveRoom}>
         Leave
       </button> */}
+      </div>
     </div>
   );
   
